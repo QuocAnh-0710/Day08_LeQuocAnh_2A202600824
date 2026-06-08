@@ -1,56 +1,104 @@
 # RAG Evaluation Results
 
-## Framework sử dụng
-
-> Ghi rõ framework đã chọn: DeepEval / RAGAS / TruLens
-
----
-
-## Overall Scores
-
-| Metric | Config A (hybrid + rerank) | Config B (dense-only) | Δ |
-|--------|---------------------------|----------------------|---|
-| Faithfulness | | | |
-| Answer Relevance | | | |
-| Context Recall | | | |
-| Context Precision | | | |
-| **Average** | | | |
+**Thời gian chạy:** 2026-06-08 12:07  
+**Framework:** Custom Semantic Evaluation (sentence-transformers/all-MiniLM-L6-v2)  
+**Golden Dataset:** 15 Q&A pairs  
 
 ---
 
-## A/B Comparison Analysis
+## 1. Tổng Quan Điểm Số (A/B Comparison)
 
-**Config A:**
-> Mô tả config ...
+| Config | Faithfulness | Answer Relevance | Context Recall | Context Precision | **Avg** |
+|--------|:-----------:|:----------------:|:--------------:|:-----------------:|:-------:|
+| **A_hybrid_rrf** Hybrid Search (Semantic + BM25) + RRF Reranking | 0.662 | 0.589 | 0.863 | 1.000 | **0.778** |
+| **B_dense_only** Dense-Only Search (Semantic Search, không BM25, không RRF) | 0.668 | 0.602 | 0.772 | 1.000 | **0.761** |
 
-**Config B:**
-> Mô tả config ...
+### Nhận xét A/B
 
-**Kết luận:**
-> Config nào tốt hơn? Vì sao? (2-3 câu)
-
----
-
-## Worst Performers (Bottom 3)
-
-| # | Question | Faithfulness | Relevance | Recall | Failure Stage | Root Cause |
-|---|----------|-------------|-----------|--------|---------------|------------|
-| 1 | | | | | | |
-| 2 | | | | | | |
-| 3 | | | | | | |
+- **Config A_hybrid_rrf** thắng với avg score cao hơn **0.0179** điểm.
+- Điểm cải thiện rõ nhất ở: **Context Recall** — hybrid search lấy được nhiều evidence liên quan hơn.
+- RRF reranking giúp tăng chất lượng kết quả tổng hợp từ 2 nguồn (semantic + BM25).
 
 ---
 
-## Recommendations
+## 2. Chi Tiết Từng Q&A (Config A — Hybrid+RRF)
 
-### Cải tiến 1
-**Action:**  
-**Expected impact:**  
+| # | Category | Question | F | AR | CR | CP | Avg |
+|---|----------|----------|:-:|:--:|:--:|:--:|:---:|
+| 1 | legal | Hình phạt cho tội tàng trữ trái phép chất ma tuý theo Đ... | 0.71 | 0.68 | 1.00 | 1.00 | **0.85** |
+| 2 | legal | Luật Phòng, chống ma tuý 2021 quy định những hình thức ... | 0.71 | 0.64 | 1.00 | 1.00 | **0.84** |
+| 3 | legal | Thời hạn cai nghiện ma tuý bắt buộc theo Luật Phòng, ch... | 0.73 | 0.68 | 1.00 | 1.00 | **0.85** |
+| 4 | legal | Luật Phòng, chống ma tuý 2021 nghiêm cấm những hành vi ... | 0.71 | 0.60 | 0.21 | 1.00 | **0.63** |
+| 5 | legal | Tội mua bán trái phép chất ma tuý theo Điều 251 bị phạt... | 0.67 | 0.72 | 1.00 | 1.00 | **0.85** |
+| 6 | legal | Hình phạt cho tội sử dụng trái phép chất ma tuý (Điều 2... | 0.60 | 0.53 | 1.00 | 1.00 | **0.78** |
+| 7 | legal | Tội tổ chức sử dụng trái phép chất ma tuý theo Điều 256... | 0.75 | 0.67 | 0.83 | 1.00 | **0.81** |
+| 8 | legal | Danh mục chất ma tuý nhóm I theo Nghị định 105/2021 gồm... | 0.57 | 0.42 | 1.00 | 1.00 | **0.75** |
+| 9 | legal | Hình phạt tội vận chuyển trái phép chất ma tuý theo Điề... | 0.59 | 0.56 | 1.00 | 1.00 | **0.79** |
+| 10 | news | Ca sĩ Chi Dân và anh trai bị đề nghị truy tố về tội gì ... | 0.71 | 0.62 | 1.00 | 1.00 | **0.83** |
+| 11 | news | Ca sĩ Miu Lê bị bắt quả tang trong hoàn cảnh nào? | 0.66 | 0.50 | 1.00 | 1.00 | **0.79** |
+| 12 | news | Ca sĩ Long Nhật bị khởi tố và bắt tạm giam vì lý do gì? | 0.64 | 0.49 | 1.00 | 1.00 | **0.78** |
+| 13 | news | Ca sĩ Sơn Ngọc Minh có tình trạng như thế nào trước khi... | 0.68 | 0.60 | 0.70 | 1.00 | **0.75** |
+| 14 | news | Rapper Bình Gold bị bắt vì lý do gì và trong hoàn cảnh ... | 0.55 | 0.54 | 0.70 | 1.00 | **0.70** |
+| 15 | news | Hậu quả pháp lý mà nghệ sĩ Việt Nam phải đối mặt khi bị... | 0.63 | 0.58 | 0.50 | 1.00 | **0.68** |
 
-### Cải tiến 2
-**Action:**  
-**Expected impact:**  
+---
 
-### Cải tiến 3
-**Action:**  
-**Expected impact:**  
+## 3. Worst Performers & Phân Tích
+
+3 Q&A có điểm thấp nhất (Config A):
+
+### legal_04 — avg=0.632
+**Q:** Luật Phòng, chống ma tuý 2021 nghiêm cấm những hành vi nào?
+**A (rút gọn):** [No API key] Context: [Document 1 | Source: luat-phong-chong-ma-tuy-2021 | Type: legal]
+LUẬT PHÒNG, CHỐNG MA TUÝ
+
+Luật số: 73/2021/QH15 | Ngày ban hành: 30/03/2021
+
+Căn cứ Hiến pháp nước Cộng hòa xã h...
+
+- Faithfulness: 0.714  
+- Answer Relevance: 0.599  
+- Context Recall: 0.214  
+- Context Precision: 1.000
+
+### news_06 — avg=0.679
+**Q:** Hậu quả pháp lý mà nghệ sĩ Việt Nam phải đối mặt khi bị bắt vì ma tuý là gì?
+**A (rút gọn):** [No API key] Context: [Document 1 | Source: article_02 | Type: news]
+# Miu Lê trước khi bị bắt quả tang dùng ma túy: 'Tôi không biết mình thực sự muốn gì'
+
+**Source:** https://cuoi.tuoitre.vn/miu-le-t...
+
+- Faithfulness: 0.633  
+- Answer Relevance: 0.582  
+- Context Recall: 0.500  
+- Context Precision: 1.000
+
+### news_05 — avg=0.698
+**Q:** Rapper Bình Gold bị bắt vì lý do gì và trong hoàn cảnh nào?
+**A (rút gọn):** [No API key] Context: [Document 1 | Source: article_05 | Type: news]
+# Rapper Bình Gold vừa bị bắt vì dương tính ma túy
+
+**Source:** https://cuoi.tuoitre.vn/rapper-nhieu-tat-binh-gold-vua-bi-bat-vi-du...
+
+- Faithfulness: 0.551  
+- Answer Relevance: 0.540  
+- Context Recall: 0.700  
+- Context Precision: 1.000
+
+---
+
+## 4. Đề Xuất Cải Tiến
+
+1. **Chunking tốt hơn**: Dùng MarkdownHeaderTextSplitter thay vì RecursiveCharacterTextSplitter
+   để giữ nguyên cấu trúc Điều/Khoản của văn bản pháp luật → tăng Context Recall.
+2. **Embedding model mạnh hơn**: Thay `all-MiniLM-L6-v2` bằng `BAAI/bge-m3`
+   (multilingual, 1024 dim) → tăng Faithfulness và Answer Relevance.
+3. **Cross-encoder reranking**: Bổ sung Jina Reranker sau RRF để tăng
+   Context Precision (loại bỏ chunk ít liên quan).
+4. **HyDE (Hypothetical Document Embedding)**: Tạo hypothetical answer trước khi embed query
+   → tăng semantic search recall cho câu hỏi về nghệ sĩ.
+5. **Tăng golden dataset**: Thêm câu hỏi về các nghệ sĩ khác và các điều luật chi tiết hơn.
+
+---
+
+*Generated by eval_pipeline.py | 2026-06-08 12:07*

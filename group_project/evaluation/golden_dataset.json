@@ -1,17 +1,107 @@
 [
   {
-    "question": "Hình phạt cho tội tàng trữ trái phép chất ma tuý theo Điều 249 Bộ luật Hình sự?",
-    "expected_answer": "Phạt tù từ 1 đến 5 năm đối với trường hợp tàng trữ từ 1g đến dưới 5g heroin hoặc cocaine, hoặc chất ma tuý khác với khối lượng tương đương.",
-    "expected_context": "Bộ luật Hình sự 2015, Điều 249"
+    "id": "legal_01",
+    "category": "legal",
+    "question": "Hình phạt cho tội tàng trữ trái phép chất ma tuý theo Điều 249 Bộ luật Hình sự là bao nhiêu năm tù?",
+    "expected_answer": "Tội tàng trữ trái phép chất ma tuý theo Điều 249 bị phạt tù từ 01 năm đến 05 năm ở khung cơ bản. Nếu tàng trữ số lượng lớn hơn (nhựa thuốc phiện từ 500g đến 01kg, hoặc heroin/cocain từ 05g đến 30g) thì bị phạt tù từ 05 năm đến 10 năm.",
+    "expected_context": "Điều 249 Bộ luật Hình sự 2015 tàng trữ trái phép chất ma tuý phạt tù 01 đến 05 năm"
   },
   {
-    "question": "Luật Phòng chống ma tuý 2021 quy định những hình thức cai nghiện nào?",
-    "expected_answer": "Cai nghiện tự nguyện tại gia đình, cai nghiện tự nguyện tại cộng đồng, cai nghiện tự nguyện tại cơ sở cai nghiện, và cai nghiện bắt buộc tại cơ sở cai nghiện.",
-    "expected_context": "Luật Phòng chống ma tuý 2021, Chương V"
+    "id": "legal_02",
+    "category": "legal",
+    "question": "Luật Phòng, chống ma tuý 2021 quy định những hình thức cai nghiện ma tuý nào?",
+    "expected_answer": "Luật Phòng, chống ma tuý 2021 quy định 4 hình thức cai nghiện: (1) Cai nghiện tự nguyện tại gia đình, (2) Cai nghiện tự nguyện tại cộng đồng, (3) Cai nghiện tự nguyện tại cơ sở cai nghiện, và (4) Cai nghiện bắt buộc tại cơ sở cai nghiện bắt buộc.",
+    "expected_context": "Điều 26 Luật Phòng chống ma tuý 2021 hình thức cai nghiện tự nguyện bắt buộc"
   },
   {
-    "question": "Danh mục các chất ma tuý thuộc nhóm I theo quy định pháp luật Việt Nam gồm những chất nào?",
-    "expected_answer": "Nhóm I gồm các chất ma tuý tuyệt đối cấm sử dụng trong y học và đời sống, bao gồm heroin, cocaine, methamphetamine, MDMA (ecstasy), cannabis (cần sa), và các chất tương tự.",
-    "expected_context": "Nghị định 57/2022/NĐ-CP, Phụ lục I"
+    "id": "legal_03",
+    "category": "legal",
+    "question": "Thời hạn cai nghiện ma tuý bắt buộc theo Luật Phòng, chống ma tuý 2021 là bao lâu?",
+    "expected_answer": "Theo Điều 32 Luật Phòng, chống ma tuý 2021, thời hạn cai nghiện ma tuý bắt buộc từ 12 tháng đến 24 tháng.",
+    "expected_context": "Điều 32 cai nghiện bắt buộc 12 tháng 24 tháng"
+  },
+  {
+    "id": "legal_04",
+    "category": "legal",
+    "question": "Luật Phòng, chống ma tuý 2021 nghiêm cấm những hành vi nào?",
+    "expected_answer": "Điều 44 Luật Phòng chống ma tuý 2021 nghiêm cấm: trồng cây có chứa chất ma tuý; sản xuất, tàng trữ, vận chuyển, mua bán, trao đổi trái phép chất ma tuý; sử dụng, tổ chức sử dụng trái phép chất ma tuý; xúi giục, lôi kéo người khác sử dụng ma tuý; sản xuất, tàng trữ phương tiện sử dụng ma tuý; hợp pháp hoá tiền từ tội phạm ma tuý.",
+    "expected_context": "Điều 44 nghiêm cấm trồng sản xuất tàng trữ vận chuyển mua bán sử dụng ma tuý"
+  },
+  {
+    "id": "legal_05",
+    "category": "legal",
+    "question": "Tội mua bán trái phép chất ma tuý theo Điều 251 bị phạt như thế nào?",
+    "expected_answer": "Theo Điều 251 Bộ luật Hình sự 2015, tội mua bán trái phép chất ma tuý bị phạt tù từ 02 đến 07 năm ở khung cơ bản. Nếu có tổ chức, phạm tội 2 lần trở lên, hoặc đối với người chưa thành niên thì phạt tù từ 07 đến 15 năm. Trường hợp chuyên nghiệp hoặc dùng người dưới 16 tuổi thì phạt tù 15-20 năm. Gây hậu quả đặc biệt nghiêm trọng có thể bị phạt tù 20 năm, tù chung thân hoặc tử hình.",
+    "expected_context": "Điều 251 mua bán trái phép chất ma tuý phạt tù 02 07 15 20 năm tử hình"
+  },
+  {
+    "id": "legal_06",
+    "category": "legal",
+    "question": "Hình phạt cho tội sử dụng trái phép chất ma tuý (Điều 255 Bộ luật Hình sự) là gì?",
+    "expected_answer": "Theo Điều 255 Bộ luật Hình sự 2015, người sử dụng trái phép chất ma tuý sau khi đã bị xử phạt vi phạm hành chính hoặc đã bị đưa vào cơ sở cai nghiện bắt buộc mà còn vi phạm thì bị phạt tù từ 03 tháng đến 02 năm. Nếu sử dụng heroin/thuốc phiện, có tổ chức, hoặc đối với người từ 13-18 tuổi thì phạt tù từ 02 đến 05 năm.",
+    "expected_context": "Điều 255 sử dụng trái phép chất ma tuý phạt tù 03 tháng 02 năm heroin"
+  },
+  {
+    "id": "legal_07",
+    "category": "legal",
+    "question": "Tội tổ chức sử dụng trái phép chất ma tuý theo Điều 256 bị xử lý thế nào?",
+    "expected_answer": "Theo Điều 256 Bộ luật Hình sự 2015, tội tổ chức sử dụng trái phép chất ma tuý bị phạt tù từ 02 đến 07 năm ở khung cơ bản. Nếu phạm tội 2 lần, đối với nhiều người, với người chưa thành niên, dùng vũ lực thì phạt 07-15 năm. Nếu gây chết người hoặc thương tích nặng cho nhiều người thì phạt 15-20 năm hoặc tù chung thân.",
+    "expected_context": "Điều 256 tổ chức sử dụng trái phép chất ma tuý phạt tù 02 15 20 năm tù chung thân"
+  },
+  {
+    "id": "legal_08",
+    "category": "legal",
+    "question": "Danh mục chất ma tuý nhóm I theo Nghị định 105/2021 gồm những chất nào?",
+    "expected_answer": "Theo Nghị định 105/2021/NĐ-CP, Danh mục I gồm các chất ma tuý tuyệt đối cấm sử dụng: Heroin (diacetylmorphine), Cocain, Methamphetamine (ma tuý đá), MDMA (ecstasy), Fentanyl và các chất tương tự.",
+    "expected_context": "Danh mục I chất ma tuý tuyệt đối cấm heroin cocain methamphetamine MDMA fentanyl"
+  },
+  {
+    "id": "legal_09",
+    "category": "legal",
+    "question": "Hình phạt tội vận chuyển trái phép chất ma tuý theo Điều 250 là bao nhiêu?",
+    "expected_answer": "Theo Điều 250 Bộ luật Hình sự 2015, tội vận chuyển trái phép chất ma tuý bị phạt tù từ 02 đến 07 năm ở khung cơ bản (heroin/cocain từ 0,1g đến 5g). Gây hậu quả nghiêm trọng thì bị phạt 07-15 năm. Gây hậu quả rất nghiêm trọng hoặc đặc biệt nghiêm trọng thì bị phạt 15-20 năm, tù chung thân hoặc tử hình.",
+    "expected_context": "Điều 250 vận chuyển trái phép chất ma tuý phạt tù 02 07 15 năm tử hình"
+  },
+  {
+    "id": "news_01",
+    "category": "news",
+    "question": "Ca sĩ Chi Dân và anh trai bị đề nghị truy tố về tội gì liên quan đến ma tuý?",
+    "expected_answer": "Ca sĩ Chi Dân và anh trai bị đề nghị truy tố liên quan đến tội tổ chức sử dụng trái phép chất ma tuý, theo thông tin từ VOV.",
+    "expected_context": "Chi Dân anh trai đề nghị truy tố tổ chức sử dụng ma tuý"
+  },
+  {
+    "id": "news_02",
+    "category": "news",
+    "question": "Ca sĩ Miu Lê bị bắt quả tang trong hoàn cảnh nào?",
+    "expected_answer": "Ca sĩ Miu Lê (tên thật Lê Ánh Nhật) bị cơ quan chức năng bắt quả tang đang sử dụng ma tuý cùng nhóm bạn ở bãi biển vào ngày 11-5-2026, theo thông tin từ Tuổi Trẻ Cười.",
+    "expected_context": "Miu Lê bị bắt quả tang dùng ma tuý bãi biển nhóm bạn"
+  },
+  {
+    "id": "news_03",
+    "category": "news",
+    "question": "Ca sĩ Long Nhật bị khởi tố và bắt tạm giam vì lý do gì?",
+    "expected_answer": "Nam ca sĩ Long Nhật bị khởi tố và bắt tạm giam vì liên quan đến tội phạm về ma tuý, theo thông tin từ VietnamNet.",
+    "expected_context": "Long Nhật khởi tố bắt tạm giam ma tuý"
+  },
+  {
+    "id": "news_04",
+    "category": "news",
+    "question": "Ca sĩ Sơn Ngọc Minh có tình trạng như thế nào trước khi bị bắt vì ma tuý?",
+    "expected_answer": "Trước khi bị bắt vì ma tuý, gia đình ca sĩ Sơn Ngọc Minh mất liên lạc với anh và anh đã bỏ bê việc ca hát nhiều năm, theo thông tin từ Tuổi Trẻ Cười.",
+    "expected_context": "Sơn Ngọc Minh mất liên lạc bỏ ca hát trước bị bắt ma tuý"
+  },
+  {
+    "id": "news_05",
+    "category": "news",
+    "question": "Rapper Bình Gold bị bắt vì lý do gì và trong hoàn cảnh nào?",
+    "expected_answer": "Rapper Bình Gold bị bắt vì dương tính với ma tuý trong hoàn cảnh lạng lách trên cao tốc, theo thông tin từ Tuổi Trẻ Cười.",
+    "expected_context": "Bình Gold bắt dương tính ma tuý lạng lách cao tốc"
+  },
+  {
+    "id": "news_06",
+    "category": "news",
+    "question": "Hậu quả pháp lý mà nghệ sĩ Việt Nam phải đối mặt khi bị bắt vì ma tuý là gì?",
+    "expected_answer": "Khi bị bắt vì ma tuý, nghệ sĩ phải đối mặt với: tạm giữ, khởi tố hình sự, có thể bị phạt tù từ vài tháng đến nhiều năm tuỳ tội danh; sự nghiệp bị ảnh hưởng nghiêm trọng, bị cấm biểu diễn; ảnh hưởng tiêu cực đến gia đình và người hâm mộ.",
+    "expected_context": "nghệ sĩ bị bắt ma tuý hậu quả pháp lý tù giam sự nghiệp"
   }
 ]

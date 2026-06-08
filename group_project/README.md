@@ -171,7 +171,74 @@ run_dashboard()
 ## Kiến Trúc Hệ Thống
 
 ```
-[Vẽ diagram kiến trúc ở đây]
+┌─────────────────────────────────────────────────────────┐
+│                  DATA LAYER (Task 1–3)                   │
+│                                                          │
+│  data/landing/legal/   data/landing/news/                │
+│  (3 file DOCX pháp luật)  (5 file JSON bài báo)         │
+│           │                       │                      │
+│           └──────────┬────────────┘                      │
+│                      ▼  MarkItDown                       │
+│              data/standardized/                          │
+│         legal/*.md       news/*.md                       │
+└──────────────────────┬──────────────────────────────────┘
+                       │
+                       ▼
+┌─────────────────────────────────────────────────────────┐
+│              INDEXING LAYER (Task 4)                     │
+│                                                          │
+│  RecursiveCharacterTextSplitter (chunk_size=500,        │
+│  chunk_overlap=50) → all-MiniLM-L6-v2 (384 dim)        │
+│                                                          │
+│  ┌──────────────────┐    ┌───────────────────────────┐  │
+│  │   ChromaDB       │    │   corpus.json             │  │
+│  │  (dense index)   │    │  (BM25 corpus)            │  │
+│  └──────────────────┘    └───────────────────────────┘  │
+└──────────────────────────────────────────────────────────┘
+                       │
+                       ▼
+┌─────────────────────────────────────────────────────────┐
+│            RETRIEVAL PIPELINE (Task 5–9)                 │
+│                                                          │
+│  User Query                                              │
+│      │                                                   │
+│      ├──────────────────────────────────────┐            │
+│      ▼                                      ▼            │
+│  Semantic Search (Task 5)         Lexical Search (Task 6)│
+│  ChromaDB cosine similarity       BM25Okapi (rank-bm25) │
+│  top_k × 2 results                top_k × 2 results     │
+│      │                                      │            │
+│      └───────────────┬──────────────────────┘            │
+│                      ▼                                   │
+│             RRF Reranking (Task 7)                       │
+│          score(d) = Σ 1/(60 + rank)                     │
+│                      │                                   │
+│           top score < threshold?                         │
+│                ├── Yes ──→ PageIndex Fallback (Task 8)  │
+│                └── No  ──→ Top-K hybrid results         │
+└──────────────────────┬──────────────────────────────────┘
+                       │
+                       ▼
+┌─────────────────────────────────────────────────────────┐
+│              GENERATION LAYER (Task 10)                  │
+│                                                          │
+│  1. reorder_for_llm() — tránh "lost in the middle"      │
+│     [best, 3rd, 5th, 4th, 2nd]                          │
+│  2. format_context() — gắn source label cho citation    │
+│  3. Groq LLaMA-3.1-8b-instant + SYSTEM_PROMPT           │
+│     (temperature=0.3, max_tokens=1024)                   │
+│  4. Return { answer, sources, retrieval_source }         │
+└──────────────────────┬──────────────────────────────────┘
+                       │
+                       ▼
+┌─────────────────────────────────────────────────────────┐
+│              STREAMLIT CHATBOT UI (app.py)               │
+│                                                          │
+│  • Conversation memory (multi-turn, last 2 Q+A pairs)   │
+│  • Source panel: badge Pháp luật / Tin tức + score       │
+│  • Sidebar: top_k slider, threshold slider, memory toggle│
+│  • Example question buttons                              │
+└─────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -180,10 +247,20 @@ run_dashboard()
 
 | Thành viên | MSSV | Nhiệm vụ | Trạng thái |
 |-----------|------|----------|------------|
-| | | | |
-| | | | |
-| | | | |
-| | | | |
+| Lê Quốc Anh | 2A202600824 | Chuẩn bị dữ liệu và tài liệu nguồn: thu thập văn bản pháp luật, tin tức liên quan, chuẩn hoá dữ liệu đầu vào và kiểm tra metadata cho legal/news documents. | Hoàn thành |
+| Nguyễn Đức Khang | 2A202600588 | Xây dựng lõi RAG pipeline: chunking, semantic search, lexical search, reranking, PageIndex fallback và hàm generation có citation. | Hoàn thành |
+| Nguyễn Đức Mạnh | 2A202600945 | Phát triển giao diện chatbot và lớp tích hợp: kết nối frontend/chat UI với FastAPI, hiển thị câu trả lời, citation và source documents. | Hoàn thành |
+| Lý Hải Long | 2A202600568 | Phụ trách evaluation pipeline: tạo golden dataset, chạy đánh giá A/B, tổng hợp results.md và kiểm tra hướng dẫn chạy demo. | Hoàn thành |
+
+
+---
+
+## Deliverables
+
+- [x] `app.py` — Streamlit RAG Chatbot với conversation memory
+- [x] `group_project/evaluation/golden_dataset.json` — 15 cặp Q&A (9 legal + 6 news)
+- [x] `group_project/evaluation/eval_pipeline.py` — Custom semantic evaluation (offline, không cần LLM judge)
+- [x] `group_project/evaluation/results.md` — Bảng điểm + A/B comparison + worst performers analysis
 
 ---
 
@@ -193,10 +270,17 @@ run_dashboard()
 # Cài đặt dependencies
 pip install -r requirements.txt
 
-# Chạy app
+# (Nếu chưa chạy) Build index từ đầu
+python src/task1_collect_legal_docs.py
+python src/task2_crawl_news.py
+python src/task3_convert_markdown.py
+python src/task4_chunking_indexing.py
+
+# Chạy chatbot
 streamlit run app.py
-# hoặc
-chainlit run app.py
+
+# Chạy evaluation
+python group_project/evaluation/eval_pipeline.py
 ```
 
 ---

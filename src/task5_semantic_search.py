@@ -1,66 +1,89 @@
 """
 Task 5 — Semantic Search Module.
 
-Viết module tìm kiếm ngữ nghĩa (dense retrieval) trên vector store.
-
-Yêu cầu:
-    - Input: query string + top_k
-    - Output: danh sách chunks có score, sorted descending
-    - Phải tương thích với embedding model và vector store ở Task 4
+Dense retrieval sử dụng ChromaDB + all-MiniLM-L6-v2 embeddings.
+Query embedding → cosine similarity → top_k results sorted descending.
 """
+
+from pathlib import Path
+
+_CHROMA_DIR = Path(__file__).parent.parent / "data" / "chroma_db"
+_COLLECTION_NAME = "DrugLawDocs"
+_EMBEDDING_MODEL = "all-MiniLM-L6-v2"
+
+# Lazy-load để tránh import chậm khi test
+_collection = None
+
+
+def _get_collection():
+    global _collection
+    if _collection is None:
+        import chromadb
+        from chromadb.utils import embedding_functions
+
+        if not _CHROMA_DIR.exists():
+            raise RuntimeError(
+                "ChromaDB chưa được tạo. Chạy task4_chunking_indexing.run_pipeline() trước."
+            )
+
+        client = chromadb.PersistentClient(path=str(_CHROMA_DIR))
+        ef = embedding_functions.SentenceTransformerEmbeddingFunction(
+            model_name=_EMBEDDING_MODEL
+        )
+        _collection = client.get_collection(
+            name=_COLLECTION_NAME, embedding_function=ef
+        )
+    return _collection
 
 
 def semantic_search(query: str, top_k: int = 10) -> list[dict]:
     """
-    Tìm kiếm ngữ nghĩa sử dụng vector similarity.
+    Tìm kiếm ngữ nghĩa sử dụng vector cosine similarity.
 
     Args:
         query: Câu truy vấn
         top_k: Số lượng kết quả tối đa
 
     Returns:
-        List of {
-            'content': str,      # Nội dung chunk
-            'score': float,      # Cosine similarity score
-            'metadata': dict     # source, doc_type, chunk_index
-        }
+        List of {'content': str, 'score': float, 'metadata': dict}
         Sorted by score descending.
     """
-    # TODO: Implement semantic search
-    #
-    # Bước 1: Embed query bằng cùng model ở Task 4
-    # Bước 2: Query vector store (cosine similarity)
-    # Bước 3: Return top_k results
-    #
-    # Ví dụ với Weaviate:
-    # import weaviate
-    # from sentence_transformers import SentenceTransformer
-    #
-    # model = SentenceTransformer("BAAI/bge-m3")
-    # query_embedding = model.encode(query).tolist()
-    #
-    # client = weaviate.connect_to_local()
-    # collection = client.collections.get("DrugLawDocs")
-    #
-    # results = collection.query.near_vector(
-    #     near_vector=query_embedding,
-    #     limit=top_k,
-    #     return_metadata=MetadataQuery(distance=True)
-    # )
-    #
-    # return [
-    #     {
-    #         "content": obj.properties["content"],
-    #         "score": 1 - obj.metadata.distance,  # distance → similarity
-    #         "metadata": {"source": obj.properties["source"], ...}
-    #     }
-    #     for obj in results.objects
-    # ]
-    raise NotImplementedError("Implement semantic_search")
+    collection = _get_collection()
+
+    results = collection.query(
+        query_texts=[query],
+        n_results=min(top_k, collection.count()),
+        include=["documents", "metadatas", "distances"],
+    )
+
+    output = []
+    if results["documents"] and results["documents"][0]:
+        for doc, meta, dist in zip(
+            results["documents"][0],
+            results["metadatas"][0],
+            results["distances"][0],
+        ):
+            # ChromaDB distance (cosine) → similarity: score = 1 - distance
+            score = max(0.0, 1.0 - dist)
+            output.append({
+                "content": doc,
+                "score": round(score, 4),
+                "metadata": meta or {},
+            })
+
+    # Đảm bảo sorted descending
+    output.sort(key=lambda x: x["score"], reverse=True)
+    return output[:top_k]
 
 
 if __name__ == "__main__":
-    # Test
-    results = semantic_search("hình phạt cho tội tàng trữ ma tuý", top_k=5)
-    for r in results:
-        print(f"[{r['score']:.3f}] {r['content'][:100]}...")
+    test_queries = [
+        "hình phạt cho tội tàng trữ ma tuý",
+        "cai nghiện ma tuý bắt buộc",
+        "nghệ sĩ bị bắt vì ma tuý",
+    ]
+    for q in test_queries:
+        print(f"\nQuery: {q}")
+        results = semantic_search(q, top_k=3)
+        for r in results:
+            print(f"  [{r['score']:.3f}] {r['content'][:80]}...")
